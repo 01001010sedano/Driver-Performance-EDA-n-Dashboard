@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Driver Performance API — Week 3",
+    "description": "Laravel 10 API endpoints for driver performance metrics with Redis caching.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "start",    "value": "2025-01-01",           "type": "string" },
+    { "key": "end",      "value": "2025-03-31",           "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Weekly Summary",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/metrics/weekly?start={{start}}&end={{end}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "metrics", "weekly"],
+          "query": [
+            { "key": "start", "value": "{{start}}" },
+            { "key": "end",   "value": "{{end}}" }
+          ]
+        },
+        "description": "Weekly aggregated totals: delays, accidents, violations, avg rating. Cache key: weekly_summary:{start}:{end}"
+      }
+    },
+    {
+      "name": "Top Drivers — by violations",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/metrics/top-drivers?metric=violations&limit=10&start={{start}}&end={{end}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "metrics", "top-drivers"],
+          "query": [
+            { "key": "metric", "value": "violations" },
+            { "key": "limit",  "value": "10" },
+            { "key": "start",  "value": "{{start}}" },
+            { "key": "end",    "value": "{{end}}" }
+          ]
+        },
+        "description": "metric: violations | accidents | delays. limit: integer."
+      }
+    },
+    {
+      "name": "Top Drivers — by accidents",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/metrics/top-drivers?metric=accidents&limit=10&start={{start}}&end={{end}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "metrics", "top-drivers"],
+          "query": [
+            { "key": "metric", "value": "accidents" },
+            { "key": "limit",  "value": "10" },
+            { "key": "start",  "value": "{{start}}" },
+            { "key": "end",    "value": "{{end}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intervention Candidates",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/metrics/interventions?threshold=2&start={{start}}&end={{end}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "metrics", "interventions"],
+          "query": [
+            { "key": "threshold", "value": "2" },
+            { "key": "start",     "value": "{{start}}" },
+            { "key": "end",       "value": "{{end}}" }
+          ]
+        },
+        "description": "Returns drivers with total accidents above threshold. Increase threshold to reduce list."
+      }
+    },
+    {
+      "name": "Driver Detail — D046",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/metrics/driver/D046?start={{start}}&end={{end}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "metrics", "driver", "D046"],
+          "query": [
+            { "key": "start", "value": "{{start}}" },
+            { "key": "end",   "value": "{{end}}" }
+          ]
+        },
+        "description": "Per-driver daily time series including summary stats."
+      }
+    },
+    {
+      "name": "Driver List",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/drivers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "drivers"]
+        },
+        "description": "Full driver list with aggregate stats. Used for frontend dropdown."
+      }
+    }
+  ]
+}
